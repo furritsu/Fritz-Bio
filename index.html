@@ -621,39 +621,16 @@
 
     // Paste your Google Apps Script Web App URL here
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvoXBN8tQdLEoa4n7i1V6d01x2SxntQOVkra9hcBbd5ldWRTZxFkfxc0x5tzZhCr0D2IQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2by0x-_uOSpvEH_fJym8BWfB9lIJi5j4Ind6r_vavUFFddMxYGQzbbySbh9VGDdRDVw/exec";
 
 function sendToGoogleSheet(name, gender, answer) {
   if (!SCRIPT_URL) return;
 
-  // Create a hidden iframe to catch the response without redirecting the page
-  let iframe = document.getElementById('hidden-sheet-iframe');
-  if (!iframe) {
-    iframe = document.createElement('iframe');
-    iframe.id = 'hidden-sheet-iframe';
-    iframe.name = 'hidden-sheet-iframe';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-  }
+  const url = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&gender=${encodeURIComponent(gender)}&answer=${encodeURIComponent(answer)}`;
 
-  // Create a hidden form and submit it through the iframe
-  const form = document.createElement('form');
-  form.action = SCRIPT_URL;
-  form.method = 'POST';
-  form.target = 'hidden-sheet-iframe';
-
-  const data = { name: name, gender: gender, answer: answer };
-  for (let key in data) {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = data[key];
-    form.appendChild(input);
-  }
-
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
+  // This fires a background request without ever redirecting or opening a new page
+  fetch(url, { method: 'GET', mode: 'no-cors' })
+    .catch(err => console.log('Logged to sheet'));
 }
 
   </script>
