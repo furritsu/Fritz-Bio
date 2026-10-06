@@ -625,12 +625,18 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvoXBN8tQdLEoa4n7il
 
 function sendToGoogleSheet(name, gender, answer) {
   if (!SCRIPT_URL) return;
-  
+
+  const payload = new URLSearchParams({
+    name: name,
+    gender: gender,
+    answer: answer
+  });
+
   fetch(SCRIPT_URL, {
     method: 'POST',
     mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ name: name, gender: gender, answer: answer })
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: payload.toString()
   }).catch(err => console.error('Error logging to Sheet:', err));
 }
 
