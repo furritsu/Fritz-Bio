@@ -621,15 +621,22 @@
 
     // Paste your Google Apps Script Web App URL here
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2by0x-_uOSpvEH_fJym8BWfB9lIJi5j4Ind6r_vavUFFddMxYGQzbbySbh9VGDdRDVw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvoXBN8tQdLEoa4n7i1V6d01x2SxntQOVkra9hcBbd5ldWRTZxFkfxc0x5tzZhCr0D2IQ/exec"; // Make sure this is your exact web app URL
 
 function sendToGoogleSheet(name, gender, answer) {
   if (!SCRIPT_URL) return;
 
   const url = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&gender=${encodeURIComponent(gender)}&answer=${encodeURIComponent(answer)}`;
-  
-  const img = new Image();
-  img.src = url;
+
+  // Use a hidden iframe to execute the GET request natively
+  let iframe = document.getElementById('sheet-iframe');
+  if (!iframe) {
+    iframe = document.createElement('iframe');
+    iframe.id = 'sheet-iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+  }
+  iframe.src = url;
 }
 
   </script>
