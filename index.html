@@ -621,22 +621,20 @@
 
     // Paste your Google Apps Script Web App URL here
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvoXBN8tQdLEoa4n7ilV6dO1x2SxntQOVkrA9hcBbd5IdWRTZxFkfxc0x5tZhCr0D2IQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypCne2qd4FeFkguL8RlwfQfVlXMw1-wJgi6W5O7U2rvw94-0pSiLKQ4EsDKDCb7sDDng/exec";
 
 function sendToGoogleSheet(name, gender, answer) {
   if (!SCRIPT_URL) return;
 
-  const payload = new URLSearchParams({
-    name: name,
-    gender: gender,
-    answer: answer
-  });
+  const params = new URLSearchParams();
+  params.append('name', name);
+  params.append('gender', gender);
+  params.append('answer', answer);
 
   fetch(SCRIPT_URL, {
     method: 'POST',
     mode: 'no-cors',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: payload.toString()
+    body: params
   }).catch(err => console.error('Error logging to Sheet:', err));
 }
 
