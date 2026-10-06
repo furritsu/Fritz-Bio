@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Fritz Test ✨</title>
+  <title>The Fritz Match Test ✨</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -33,7 +33,7 @@
       box-shadow: 0 20px 40px rgba(244, 114, 182, 0.25);
     }
 
-    /* Floating Hearts Background Animation */
+    /* Floating Background Elements */
     .bg-heart {
       position: absolute;
       color: rgba(244, 114, 182, 0.25);
@@ -79,9 +79,96 @@
       100% { background-position: 200% 50%; }
     }
 
-    /* Smooth scale transition for escaping button */
     #no-btn {
       transition: top 0.2s ease-out, left 0.2s ease-out, transform 0.2s ease-out;
+    }
+
+    /* Keyframes for Interactive Icon Animations */
+    .handshake-bump-active {
+      animation: handshakeBump 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @keyframes handshakeBump {
+      0% { transform: scale(1) rotate(0deg); }
+      15% { transform: scale(1.25) rotate(-15deg); }
+      30% { transform: scale(1.3) rotate(15deg); }
+      45% { transform: scale(1.2) rotate(-10deg); }
+      60% { transform: scale(1.25) rotate(10deg); }
+      75% { transform: scale(1.1) rotate(-5deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .heart-pump-active {
+      animation: heartPump 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    @keyframes heartPump {
+      0% { transform: scale(1); }
+      20% { transform: scale(1.35); }
+      40% { transform: scale(0.95); }
+      60% { transform: scale(1.25); }
+      80% { transform: scale(0.98); }
+      100% { transform: scale(1); }
+    }
+
+    .rainbow-wiggle-active {
+      animation: rainbowWiggle 0.6s ease-in-out both;
+    }
+
+    @keyframes rainbowWiggle {
+      0% { transform: scale(1) rotate(0deg); }
+      20% { transform: scale(1.25) rotate(-20deg); }
+      40% { transform: scale(1.3) rotate(20deg); }
+      60% { transform: scale(1.2) rotate(-15deg); }
+      80% { transform: scale(1.1) rotate(10deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    /* Burst Particles */
+    .outcome-particle {
+      position: absolute;
+      pointer-events: none;
+      font-size: 1.5rem;
+      z-index: 50;
+      animation: particleBurst 0.9s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+
+    @keyframes particleBurst {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--burst-x)), calc(-50% + var(--burst-y))) scale(1.5) rotate(var(--burst-r));
+      }
+    }
+
+    .pulse-glow-blue {
+      animation: glowPulseBlue 2s infinite ease-in-out;
+    }
+    @keyframes glowPulseBlue {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+      50% { box-shadow: 0 0 0 14px rgba(59, 130, 246, 0); }
+    }
+
+    .pulse-glow-pink {
+      animation: glowPulsePink 2s infinite ease-in-out;
+    }
+    @keyframes glowPulsePink {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4); }
+      50% { box-shadow: 0 0 0 14px rgba(236, 72, 153, 0); }
+    }
+
+    .pulse-glow-rainbow {
+      animation: glowPulseRainbow 2s infinite ease-in-out;
+    }
+    @keyframes glowPulseRainbow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
+      50% { box-shadow: 0 0 0 14px rgba(168, 85, 247, 0); }
     }
   </style>
 </head>
@@ -91,8 +178,8 @@
   <!-- Background Floating Decorative Elements -->
   <div id="bg-decorations"></div>
 
-  <!-- Main Application Container -->
-  <main class="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 relative z-10 transition-all duration-300">
+  <!-- Main Application Card -->
+  <main id="app-card" class="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 relative z-10 transition-all duration-300">
     
     <!-- STEP 1: WHAT IS YOUR NAME? -->
     <div id="step-1" class="step-view text-center space-y-6">
@@ -196,41 +283,73 @@
       </div>
     </div>
 
-    <!-- OUTCOME 1: FEMALE + YES -->
+    <!-- OUTCOME 1: FEMALE + YES (Interactive Love Section) -->
     <div id="outcome-love" class="step-view text-center space-y-6 hidden">
-      <div class="relative inline-block">
-        <div class="w-24 h-24 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 mx-auto shadow-lg">
-          <i class="fa-solid fa-heart-circle-check text-5xl animate-bounce"></i>
-        </div>
-        <span class="absolute top-0 right-0 text-2xl">✨</span>
-        <span class="absolute bottom-0 left-0 text-2xl">💖</span>
+      <div class="relative inline-block group">
+        <button 
+          id="love-btn"
+          onclick="triggerLoveInteraction(event)"
+          class="w-28 h-28 rounded-full bg-gradient-to-tr from-pink-100 to-rose-200 border-4 border-pink-300 flex items-center justify-center text-pink-500 mx-auto shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer pulse-glow-pink relative overflow-visible focus:outline-none">
+          
+          <i id="love-icon" class="fa-solid fa-heart-circle-check text-5xl transition-transform duration-200"></i>
+          
+          <div id="love-ring" class="absolute inset-0 rounded-full border-2 border-pink-400 opacity-0 pointer-events-none"></div>
+        </button>
+
+        <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-pink-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-md animate-bounce tracking-wide whitespace-nowrap pointer-events-none">
+          Tap me! 💖
+        </span>
       </div>
 
-      <div class="space-y-2">
+      <div class="space-y-2 pt-2">
         <h2 class="text-3xl sm:text-4xl font-black text-pink-600">I love you too ❤️</h2>
         <p class="text-gray-600 font-medium">Aww <span class="user-name-result font-bold text-pink-600"></span>, Fritz loves you so much! You two are meant to be! 🥰✨</p>
       </div>
     </div>
 
-    <!-- OUTCOME 2: MALE + YES -->
+    <!-- OUTCOME 2: MALE + YES (Interactive Gay Section) -->
     <div id="outcome-gay" class="step-view text-center space-y-6 hidden">
-      <div class="w-24 h-24 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500 mx-auto shadow-lg">
-        <i class="fa-solid fa-rainbow text-5xl animate-pulse"></i>
+      <div class="relative inline-block group">
+        <button 
+          id="gay-btn"
+          onclick="triggerGayInteraction(event)"
+          class="w-28 h-28 rounded-full bg-gradient-to-tr from-purple-100 to-indigo-200 border-4 border-indigo-300 flex items-center justify-center text-indigo-500 mx-auto shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer pulse-glow-rainbow relative overflow-visible focus:outline-none">
+          
+          <span id="gay-icon" class="text-5xl transition-transform duration-200">🤮</span>
+          
+          <div id="gay-ring" class="absolute inset-0 rounded-full border-2 border-purple-400 opacity-0 pointer-events-none"></div>
+        </button>
+
+        <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-md animate-bounce tracking-wide whitespace-nowrap pointer-events-none">
+          Tap me! 🤮
+        </span>
       </div>
 
-      <div class="space-y-3">
+      <div class="space-y-3 pt-2">
         <h2 class="text-5xl font-black rainbow-text tracking-wider">GAY</h2>
         <p class="text-gray-600 font-medium">Bro <span class="user-name-result font-bold text-indigo-600"></span>... Fritz said you are officially GAY! 🌈✨</p>
       </div>
     </div>
 
-    <!-- OUTCOME 3: MALE + NO -->
+    <!-- OUTCOME 3: MALE + NO (Interactive Handshake Section) -->
     <div id="outcome-friend" class="step-view text-center space-y-6 hidden">
-      <div class="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 mx-auto shadow-lg">
-        <i class="fa-solid fa-handshake text-5xl"></i>
+      <div class="relative inline-block group">
+        <button 
+          id="handshake-btn"
+          onclick="triggerHandshakeInteraction(event)"
+          class="w-28 h-28 rounded-full bg-gradient-to-tr from-blue-100 to-sky-200 border-4 border-blue-300 flex items-center justify-center text-blue-600 mx-auto shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer pulse-glow-blue relative overflow-visible focus:outline-none">
+          
+          <i id="handshake-icon" class="fa-solid fa-handshake text-5xl transition-transform duration-200"></i>
+          
+          <div id="handshake-ring" class="absolute inset-0 rounded-full border-2 border-blue-400 opacity-0 pointer-events-none"></div>
+        </button>
+
+        <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-md animate-bounce tracking-wide whitespace-nowrap pointer-events-none">
+          Tap me! 🤝
+        </span>
       </div>
 
-      <div class="space-y-3">
+      <div class="space-y-3 pt-2">
         <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800">Then, Okay You Are My Friend</h2>
         <p class="text-gray-600 font-medium">Respect bro! <span class="user-name-result font-bold text-blue-600"></span> and Fritz are solid best friends! 🤝🔥</p>
       </div>
@@ -239,7 +358,6 @@
   </main>
 
   <script>
-    // State Variables
     let quizState = {
       name: '',
       gender: '',
@@ -249,7 +367,6 @@
     let noClickCount = 0;
     let currentScale = 1.0;
 
-    // Background floating hearts generator
     function initBackground() {
       const container = document.getElementById('bg-decorations');
       const icons = ['fa-heart', 'fa-sparkles', 'fa-star', 'fa-hand-holding-heart'];
@@ -267,7 +384,6 @@
     }
     initBackground();
 
-    // Helper: Step Navigator
     function showStep(stepId) {
       document.querySelectorAll('.step-view').forEach(view => {
         view.classList.add('hidden');
@@ -275,7 +391,6 @@
       document.getElementById(stepId).classList.remove('hidden');
     }
 
-    // Step 1: Handle Name Submission
     function handleNextName() {
       const nameInput = document.getElementById('name-input').value.trim();
       const errorEl = document.getElementById('name-error');
@@ -294,7 +409,6 @@
       showStep('step-2');
     }
 
-    // Step 2: Handle Gender Selection
     function selectGender(gender) {
       quizState.gender = gender;
       resetNoButton();
@@ -302,16 +416,13 @@
       setupNoButtonBehavior();
     }
 
-    // Configure NO Button depending on Gender
     function setupNoButtonBehavior() {
       const noBtn = document.getElementById('no-btn');
       
-      // Remove previous event listeners by cloning
       const newNoBtn = noBtn.cloneNode(true);
       noBtn.parentNode.replaceChild(newNoBtn, noBtn);
 
       if (quizState.gender === 'Female') {
-        // Female: Escaping and Shrinking behavior
         newNoBtn.addEventListener('mouseover', escapeAndShrink);
         newNoBtn.addEventListener('touchstart', (e) => {
           e.preventDefault();
@@ -322,12 +433,10 @@
           escapeAndShrink();
         };
       } else {
-        // Male: Standard click behavior
         newNoBtn.onclick = () => handleLoveAnswer(false);
       }
     }
 
-    // Escaping and Shrinking logic for Female "No" choice
     function escapeAndShrink() {
       const noBtn = document.getElementById('no-btn');
       noClickCount++;
@@ -362,7 +471,6 @@
       noBtn.style.display = 'inline-block';
     }
 
-    // Step 3: Handle Final Decision & Send to Google Sheets
     function handleLoveAnswer(loves) {
       quizState.lovesFritz = loves;
 
@@ -385,11 +493,95 @@
         }
       }
 
-      // Send to Google Sheet
       sendToGoogleSheet(quizState.name, quizState.gender, answerText);
     }
 
-    // Send payload function
+    function createBurstParticles(btn, particlesList) {
+      const rect = btn.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const totalParticles = 12;
+
+      for (let i = 0; i < totalParticles; i++) {
+        const particle = document.createElement('span');
+        particle.className = 'outcome-particle';
+        particle.textContent = particlesList[Math.floor(Math.random() * particlesList.length)];
+        
+        particle.style.left = `${centerX}px`;
+        particle.style.top = `${centerY}px`;
+
+        const angle = (i / totalParticles) * 2 * Math.PI + (Math.random() * 0.5 - 0.25);
+        const distance = 70 + Math.random() * 60;
+        
+        const burstX = Math.cos(angle) * distance;
+        const burstY = Math.sin(angle) * distance;
+        const burstRotation = (Math.random() - 0.5) * 360;
+
+        particle.style.setProperty('--burst-x', `${burstX}px`);
+        particle.style.setProperty('--burst-y', `${burstY}px`);
+        particle.style.setProperty('--burst-r', `${burstRotation}deg`);
+
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 900);
+      }
+    }
+
+    function flashRing(ring) {
+      ring.style.transition = 'none';
+      ring.style.transform = 'scale(1)';
+      ring.style.opacity = '0.8';
+      setTimeout(() => {
+        ring.style.transition = 'all 0.5s ease-out';
+        ring.style.transform = 'scale(1.8)';
+        ring.style.opacity = '0';
+      }, 10);
+    }
+
+    // Female Love Interaction
+    function triggerLoveInteraction(event) {
+      const btn = document.getElementById('love-btn');
+      const icon = document.getElementById('love-icon');
+      const ring = document.getElementById('love-ring');
+
+      icon.classList.remove('heart-pump-active');
+      void icon.offsetWidth;
+      icon.classList.add('heart-pump-active');
+
+      flashRing(ring);
+      createBurstParticles(btn, ['❤️', '💖', '✨', '💕', '🌸']);
+      triggerHeartsConfetti();
+    }
+
+    // Male Gay Interaction
+    function triggerGayInteraction(event) {
+      const btn = document.getElementById('gay-btn');
+      const icon = document.getElementById('gay-icon');
+      const ring = document.getElementById('gay-ring');
+
+      icon.classList.remove('rainbow-wiggle-active');
+      void icon.offsetWidth;
+      icon.classList.add('rainbow-wiggle-active');
+
+      flashRing(ring);
+      createBurstParticles(btn, ['🤮', '🌈', '✨', '⭐', '💥']);
+      triggerRainbowConfetti();
+    }
+
+    // Male Friend Interaction
+    function triggerHandshakeInteraction(event) {
+      const btn = document.getElementById('handshake-btn');
+      const icon = document.getElementById('handshake-icon');
+      const ring = document.getElementById('handshake-ring');
+
+      icon.classList.remove('handshake-bump-active');
+      void icon.offsetWidth;
+      icon.classList.add('handshake-bump-active');
+
+      flashRing(ring);
+      createBurstParticles(btn, ['🤝', '✨', '🔥', '⭐', '💙']);
+    }
+
     function sendToGoogleSheet(name, gender, answer) {
       if (typeof GOOGLE_SHEET_SCRIPT_URL === 'undefined' || !GOOGLE_SHEET_SCRIPT_URL || GOOGLE_SHEET_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
         return;
@@ -405,7 +597,6 @@
       }).catch(err => console.log('Data submission error:', err));
     }
 
-    // Confetti Effects
     function triggerHeartsConfetti() {
       if (typeof confetti === 'function') {
         confetti({
@@ -427,11 +618,8 @@
         });
       }
     }
-  
-// ==========================================
-// PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
-// ==========================================
-const GOOGLE_SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvoXBN8tQdLEoa4n7ilV6dO1x2SxntQOVkrA9hcBbd5IdWRTZxFkfxc0x5tZhCr0D2IQ/exec"
-     </script>
+
+    const GOOGLE_SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvoXBN8tQdLEoa4n7ilV6dO1x2SxntQOVkrA9hcBbd5IdWRTZxFkfxc0x5tZhCr0D2IQ/exec";
+  </script>
 </body>
 </html>
