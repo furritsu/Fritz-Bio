@@ -619,17 +619,17 @@
       }
     }
 
-    const GOOGLE_SHEET_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvoXBN8tQdLEoa4n7ilV6dO1x2SxntQOVkra9hcBbd5ldWRTZxFkfxc0x5tZhCr0D2IQ/exec";
-
     // Paste your Google Apps Script Web App URL here
 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvoXBN8tQdLEoa4n7ilV6dO1x2SxntQOVkrA9hcBbd5IdWRTZxFkfxc0x5tZhCr0D2IQ/exec";
+
 function sendToGoogleSheet(name, gender, answer) {
-  if (!SCRIPT_URL || SCRIPT_URL.includes('YOUR_GOOGLE_APPS_SCRIPT')) return;
+  if (!SCRIPT_URL) return;
   
   fetch(SCRIPT_URL, {
     method: 'POST',
     mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify({ name: name, gender: gender, answer: answer })
   }).catch(err => console.error('Error logging to Sheet:', err));
 }
