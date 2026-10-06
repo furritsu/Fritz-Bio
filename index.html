@@ -627,10 +627,9 @@ function sendToGoogleSheet(name, gender, answer) {
   if (!SCRIPT_URL) return;
 
   const url = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&gender=${encodeURIComponent(gender)}&answer=${encodeURIComponent(answer)}`;
-
-  // This fires a background request without ever redirecting or opening a new page
-  fetch(url, { method: 'GET', mode: 'no-cors' })
-    .catch(err => console.log('Logged to sheet'));
+  
+  const img = new Image();
+  img.src = url;
 }
 
   </script>
