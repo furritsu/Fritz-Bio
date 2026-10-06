@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Fritz Love Test ✨</title>
+  <title>The Fritz Match Test ✨</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,454 +19,400 @@
   <style>
     body {
       font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f472b6 100%);
+      min-height: 100vh;
+      margin: 0;
       overflow-x: hidden;
-    }
-
-    /* Animated Background Gradient */
-    .bg-animated {
-      background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Glassmorphism Card Style */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 2px solid rgba(255, 255, 255, 0.7);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Background floating hearts */
-    .floating-heart {
-      position: absolute;
-      list-style: none;
-      display: block;
-      width: 20px;
-      height: 20px;
-      animation: floatUp 22s linear infinite;
-      bottom: -150px;
-      font-size: 24px;
       user-select: none;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 40px rgba(244, 114, 182, 0.25);
+    }
+
+    /* Floating Hearts Background Animation */
+    .bg-heart {
+      position: absolute;
+      color: rgba(244, 114, 182, 0.25);
+      animation: floatUp 8s linear infinite;
       pointer-events: none;
-      opacity: 0.6;
+      z-index: 0;
     }
 
     @keyframes floatUp {
       0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.8;
+        transform: translateY(100vh) scale(0.5) rotate(0deg);
+        opacity: 0;
       }
+      20% { opacity: 0.8; }
+      80% { opacity: 0.8; }
       100% {
-        transform: translateY(-1000px) rotate(720deg);
+        transform: translateY(-20vh) scale(1.3) rotate(360deg);
         opacity: 0;
       }
     }
 
-    /* Smooth Step Transitions */
-    .step-container {
-      transition: all 0.4s ease-in-out;
+    .btn-bounce {
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .btn-bounce:hover {
+      transform: translateY(-3px) scale(1.03);
+    }
+    .btn-bounce:active {
+      transform: translateY(1px) scale(0.98);
     }
 
-    .step-hidden {
-      opacity: 0;
-      transform: translateY(20px) scale(0.95);
-      pointer-events: none;
-      position: absolute;
-      width: 100%;
-    }
-
-    .step-active {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      position: relative;
-      width: 100%;
-    }
-
-    /* Rainbow animated text for GAY outcome */
+    /* Animated Rainbow Text for GAY Outcome */
     .rainbow-text {
-      background: linear-gradient(to right, #ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6, #ec4899);
+      background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: rainbow 2.5s linear infinite;
-      background-size: 200% 200%;
+      animation: rainbow 3s linear infinite;
+      background-size: 200% auto;
     }
 
     @keyframes rainbow {
       0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
     }
 
-    /* Escape transition for female No button */
+    /* Smooth scale transition for escaping button */
     #no-btn {
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+      transition: top 0.2s ease-out, left 0.2s ease-out, transform 0.2s ease-out;
     }
   </style>
 </head>
-<body class="bg-animated min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
 
-  <!-- Background Hearts Particle Layer -->
-  <div id="hearts-bg" class="absolute inset-0 pointer-events-none overflow-hidden z-0"></div>
+<body class="flex items-center justify-center min-h-screen p-4 relative overflow-hidden">
 
-  <main class="w-full max-w-lg glass-card rounded-3xl p-6 sm:p-10 relative z-10 my-auto shadow-2xl">
+  <!-- Background Floating Decorative Elements -->
+  <div id="bg-decorations"></div>
+
+  <!-- Main Application Container -->
+  <main class="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 relative z-10 transition-all duration-300">
     
-    <!-- Top Badge -->
-    <div class="text-center mb-6">
-      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-100 text-pink-600 font-semibold text-xs sm:text-sm tracking-wide shadow-sm">
-        <i class="fa-solid fa-sparkles text-pink-500"></i> The Fritz Match Test
-      </span>
-    </div>
+    <!-- STEP 1: WHAT IS YOUR NAME? -->
+    <div id="step-1" class="step-view text-center space-y-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-pink-100 text-pink-500 mb-2 shadow-inner">
+        <i class="fa-solid fa-signature text-3xl"></i>
+      </div>
+      <div>
+        <span class="text-xs font-semibold uppercase tracking-widest text-pink-500 bg-pink-50 px-3 py-1 rounded-full border border-pink-200">
+          Step 1 of 3
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-800 mt-3">What is your name?</h1>
+        <p class="text-sm text-gray-500 mt-1">Please enter your name to begin the match test ✨</p>
+      </div>
 
-    <!-- Wizard Steps Wrapper -->
-    <div class="relative min-h-[320px] flex items-center justify-center">
-
-      <!-- ================= STEP 1: NAME ================= -->
-      <div id="step-1" class="step-active flex flex-col items-center text-center space-y-6">
-        <div class="w-20 h-20 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center text-3xl shadow-inner mb-2">
-          <i class="fa-solid fa-user-astronaut"></i>
-        </div>
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-800">
-          What is your name?
-        </h1>
-        <p class="text-gray-500 text-sm">Please tell us who is taking this test!</p>
-        
-        <div class="w-full space-y-3">
+      <div class="space-y-4 pt-2">
+        <div class="relative">
           <input 
             type="text" 
             id="name-input" 
             placeholder="Type your name here..." 
-            class="w-full px-5 py-4 rounded-2xl border-2 border-pink-200 focus:border-pink-500 focus:outline-none text-center text-xl font-medium text-gray-700 bg-white/80 transition shadow-sm placeholder:text-gray-300 placeholder:text-base"
+            class="w-full px-5 py-4 rounded-2xl border-2 border-pink-200 focus:border-pink-500 focus:outline-none focus:ring-4 focus:ring-pink-100 text-gray-800 text-lg font-medium transition text-center shadow-sm placeholder-gray-400"
             autocomplete="off"
-            onkeyup="handleNameKey(event)"
           />
-          <p id="name-error" class="text-red-500 text-xs font-semibold hidden animate-bounce">
-            Please enter your name first!
-          </p>
         </div>
+        <p id="name-error" class="text-red-500 text-xs font-semibold hidden flex items-center justify-center gap-1">
+          <i class="fa-solid fa-circle-exclamation"></i> Please enter your name first!
+        </p>
 
         <button 
-          onclick="submitStep1()" 
-          class="w-full py-4 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-pink-300/50 transform hover:-translate-y-0.5 active:translate-y-0 transition flex items-center justify-center gap-2 group"
-        >
+          onclick="handleNextName()" 
+          class="btn-bounce w-full py-4 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold text-lg shadow-lg shadow-pink-500/30 hover:from-pink-600 hover:to-rose-600 flex items-center justify-center gap-2">
           <span>Continue</span>
-          <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+          <i class="fa-solid fa-arrow-right text-sm"></i>
         </button>
       </div>
-
-      <!-- ================= STEP 2: GENDER ================= -->
-      <div id="step-2" class="step-hidden flex flex-col items-center text-center space-y-6">
-        <div class="w-20 h-20 rounded-full bg-purple-100 text-purple-500 flex items-center justify-center text-3xl shadow-inner mb-2">
-          <i class="fa-solid fa-venus-mars"></i>
-        </div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800">
-          Hi <span id="display-name" class="text-pink-500"></span>! <br>What is your gender?
-        </h2>
-        <p class="text-gray-500 text-sm">Select one to proceed</p>
-
-        <div class="w-full space-y-4">
-          <button 
-            onclick="selectGender('Female')" 
-            class="w-full py-4 px-6 bg-white hover:bg-pink-50 border-2 border-pink-200 hover:border-pink-400 rounded-2xl font-bold text-gray-700 hover:text-pink-600 transition flex items-center justify-between group shadow-sm"
-          >
-            <span class="flex items-center gap-3 text-lg">
-              <i class="fa-solid fa-venus text-pink-500 text-2xl"></i>
-              Female
-            </span>
-            <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-pink-500 group-hover:translate-x-1 transition"></i>
-          </button>
-
-          <button 
-            onclick="selectGender('Male')" 
-            class="w-full py-4 px-6 bg-white hover:bg-blue-50 border-2 border-blue-200 hover:border-blue-400 rounded-2xl font-bold text-gray-700 hover:text-blue-600 transition flex items-center justify-between group shadow-sm"
-          >
-            <span class="flex items-center gap-3 text-lg">
-              <i class="fa-solid fa-mars text-blue-500 text-2xl"></i>
-              Male
-            </span>
-            <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- ================= STEP 3: LOVE FRITZ? ================= -->
-      <div id="step-3" class="step-hidden flex flex-col items-center text-center space-y-6">
-        <div class="w-20 h-20 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-3xl shadow-inner mb-2 animate-bounce">
-          <i class="fa-solid fa-heart-circle-bolt"></i>
-        </div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800">
-          Do you love Fritz? 💖
-        </h2>
-        <p class="text-gray-500 text-sm">Be honest!</p>
-
-        <div id="button-box" class="w-full flex flex-col sm:flex-row gap-4 items-center justify-center relative min-h-[140px] pt-4">
-          <!-- YES BUTTON -->
-          <button 
-            onclick="answerLove(true)" 
-            class="w-full sm:w-1/2 py-4 bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-white font-extrabold text-xl rounded-2xl shadow-lg hover:shadow-teal-300/50 transform hover:scale-105 transition active:scale-95 z-20"
-          >
-            YES! 😍
-          </button>
-
-          <!-- NO BUTTON -->
-          <button 
-            id="no-btn"
-            onmouseover="handleNoInteraction()"
-            touchstart="handleNoInteraction(event)"
-            onclick="handleNoClick()"
-            class="w-full sm:w-1/2 py-4 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-lg rounded-2xl transition shadow-sm z-10"
-            style="position: relative;"
-          >
-            No 😜
-          </button>
-        </div>
-      </div>
-
-      <!-- ================= OUTCOME A: FEMALE YES (I Love You Too) ================= -->
-      <div id="outcome-love" class="step-hidden flex flex-col items-center text-center space-y-6">
-        <div class="relative">
-          <div class="w-28 h-28 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center text-5xl shadow-lg animate-bounce">
-            💖
-          </div>
-          <span class="absolute -top-2 -right-2 text-3xl animate-pulse">✨</span>
-        </div>
-
-        <h2 class="text-3xl sm:text-4xl font-black text-pink-600 tracking-tight">
-          I love you too ❤️
-        </h2>
-        
-        <p class="text-gray-600 font-medium text-lg max-w-xs">
-          Aww <span id="romantic-name" class="font-bold text-pink-500"></span>, Fritz loves you so much! You two are meant to be! 🥰 ✨
-        </p>
-
-        <button 
-          onclick="restartQuiz()" 
-          class="w-full py-4 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-pink-300/50 transform hover:-translate-y-0.5 active:translate-y-0 transition flex items-center justify-center gap-2"
-        >
-          <i class="fa-solid fa-rotate-left"></i>
-          <span>Play Again</span>
-        </button>
-      </div>
-
-      <!-- ================= OUTCOME B: MALE YES (GAY) ================= -->
-      <div id="outcome-gay" class="step-hidden flex flex-col items-center text-center space-y-6">
-        <div class="text-6xl sm:text-7xl animate-bounce my-2">
-          🏳️‍🌈 🦄 ✨
-        </div>
-
-        <h2 class="text-6xl sm:text-7xl font-black rainbow-text tracking-widest drop-shadow-md">
-          GAY
-        </h2>
-
-        <p class="text-gray-700 font-bold text-xl">
-          Aha! <span id="gay-name" class="text-purple-600"></span>, caught you in 4K! 📸 🌈
-        </p>
-
-        <button 
-          onclick="restartQuiz()" 
-          class="w-full py-4 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-purple-300/50 transform hover:-translate-y-0.5 active:translate-y-0 transition flex items-center justify-center gap-2"
-        >
-          <i class="fa-solid fa-rotate-left"></i>
-          <span>Play Again</span>
-        </button>
-      </div>
-
-      <!-- ================= OUTCOME C: MALE NO (Friend) ================= -->
-      <div id="outcome-friend" class="step-hidden flex flex-col items-center text-center space-y-6">
-        <div class="w-24 h-24 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-5xl shadow-inner mb-2">
-          🤝
-        </div>
-
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800">
-          Then, Okay You Are My Friend
-        </h2>
-
-        <p class="text-gray-600 font-medium text-lg">
-          Respect, <span id="friend-name" class="text-blue-500 font-bold"></span>! Best bro status unlocked! 😎 👊
-        </p>
-
-        <button 
-          onclick="restartQuiz()" 
-          class="w-full py-4 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-blue-300/50 transform hover:-translate-y-0.5 active:translate-y-0 transition flex items-center justify-center gap-2"
-        >
-          <i class="fa-solid fa-rotate-left"></i>
-          <span>Play Again</span>
-        </button>
-      </div>
-
     </div>
+
+    <!-- STEP 2: WHAT IS YOUR GENDER? -->
+    <div id="step-2" class="step-view text-center space-y-6 hidden">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-purple-100 text-purple-500 mb-2 shadow-inner">
+        <i class="fa-solid fa-venus-mars text-3xl"></i>
+      </div>
+      <div>
+        <span class="text-xs font-semibold uppercase tracking-widest text-purple-500 bg-purple-50 px-3 py-1 rounded-full border border-purple-200">
+          Step 2 of 3
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 mt-3">What is your gender?</h2>
+        <p class="text-sm text-gray-500 mt-1">Hello <span id="display-user-name" class="font-bold text-pink-600"></span>, select your gender:</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 pt-2">
+        <button 
+          onclick="selectGender('Female')" 
+          class="btn-bounce py-6 px-4 rounded-2xl border-2 border-pink-200 bg-pink-50/50 hover:bg-pink-100/80 hover:border-pink-400 flex flex-col items-center gap-2 group transition">
+          <span class="w-12 h-12 rounded-full bg-pink-200 text-pink-600 flex items-center justify-center text-2xl group-hover:scale-110 transition">♀</span>
+          <span class="font-bold text-gray-800 text-lg">Female</span>
+        </button>
+
+        <button 
+          onclick="selectGender('Male')" 
+          class="btn-bounce py-6 px-4 rounded-2xl border-2 border-blue-200 bg-blue-50/50 hover:bg-blue-100/80 hover:border-blue-400 flex flex-col items-center gap-2 group transition">
+          <span class="w-12 h-12 rounded-full bg-blue-200 text-blue-600 flex items-center justify-center text-2xl group-hover:scale-110 transition">♂</span>
+          <span class="font-bold text-gray-800 text-lg">Male</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: DO YOU LOVE FRITZ? -->
+    <div id="step-3" class="step-view text-center space-y-6 hidden relative min-h-[320px] flex flex-col justify-between">
+      <div>
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-500 mb-2 shadow-inner animate-pulse">
+          <i class="fa-solid fa-heart text-3xl"></i>
+        </div>
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-widest text-rose-500 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
+            Final Question
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-800 mt-3">Do you love Fritz?</h2>
+          <p class="text-sm text-gray-500 mt-1">Be honest with your answer! 😉</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons Container -->
+      <div id="button-playground" class="relative w-full h-32 flex items-center justify-center gap-4 mt-4">
+        <!-- YES BUTTON -->
+        <button 
+          id="yes-btn"
+          onclick="handleLoveAnswer(true)" 
+          class="btn-bounce px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-500 text-white font-extrabold text-xl shadow-lg shadow-green-500/30 hover:from-emerald-600 hover:to-green-600 flex items-center gap-2 z-10">
+          <i class="fa-solid fa-check"></i>
+          <span>YES</span>
+        </button>
+
+        <!-- NO BUTTON -->
+        <button 
+          id="no-btn"
+          onclick="handleLoveAnswer(false)" 
+          class="px-8 py-4 rounded-2xl bg-gray-200 text-gray-700 font-bold text-xl hover:bg-gray-300 z-20">
+          <span>NO</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- OUTCOME 1: FEMALE + YES -->
+    <div id="outcome-love" class="step-view text-center space-y-6 hidden">
+      <div class="relative inline-block">
+        <div class="w-24 h-24 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 mx-auto shadow-lg">
+          <i class="fa-solid fa-heart-circle-check text-5xl animate-bounce"></i>
+        </div>
+        <span class="absolute top-0 right-0 text-2xl">✨</span>
+        <span class="absolute bottom-0 left-0 text-2xl">💖</span>
+      </div>
+
+      <div class="space-y-2">
+        <h2 class="text-3xl sm:text-4xl font-black text-pink-600">I love you too ❤️</h2>
+        <p class="text-gray-600 font-medium">Aww <span class="user-name-result font-bold text-pink-600"></span>, Fritz loves you so much! You two are meant to be! 🥰✨</p>
+      </div>
+    </div>
+
+    <!-- OUTCOME 2: MALE + YES -->
+    <div id="outcome-gay" class="step-view text-center space-y-6 hidden">
+      <div class="w-24 h-24 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500 mx-auto shadow-lg">
+        <i class="fa-solid fa-rainbow text-5xl animate-pulse"></i>
+      </div>
+
+      <div class="space-y-3">
+        <h2 class="text-5xl font-black rainbow-text tracking-wider">GAY</h2>
+        <p class="text-gray-600 font-medium">Bro <span class="user-name-result font-bold text-indigo-600"></span>... Fritz said you are officially GAY! 🌈✨</p>
+      </div>
+    </div>
+
+    <!-- OUTCOME 3: MALE + NO -->
+    <div id="outcome-friend" class="step-view text-center space-y-6 hidden">
+      <div class="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 mx-auto shadow-lg">
+        <i class="fa-solid fa-handshake text-5xl"></i>
+      </div>
+
+      <div class="space-y-3">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800">Then, Okay You Are My Friend</h2>
+        <p class="text-gray-600 font-medium">Respect bro! <span class="user-name-result font-bold text-blue-600"></span> and Fritz are solid best friends! 🤝🔥</p>
+      </div>
+    </div>
+
   </main>
 
   <script>
-    // Quiz State
+    // State Variables
     let quizState = {
       name: '',
       gender: '',
       lovesFritz: false
     };
 
-    // Shrink scale state for Female "No" escaping button
-    let noButtonScale = 1.0;
-    let noButtonDisappeared = false;
+    let noClickCount = 0;
+    let currentScale = 1.0;
 
-    // Create ambient background hearts
-    window.onload = function() {
-      createFloatingHearts();
-    };
-
-    function createFloatingHearts() {
-      const heartsContainer = document.getElementById('hearts-bg');
-      const heartIcons = ['❤️', '💖', '✨', '🌸', '💕', '⭐'];
+    // Background floating hearts generator
+    function initBackground() {
+      const container = document.getElementById('bg-decorations');
+      const icons = ['fa-heart', 'fa-sparkles', 'fa-star', 'fa-hand-holding-heart'];
       
-      for (let i = 0; i < 20; i++) {
-        const heart = document.createElement('div');
-        heart.className = 'floating-heart';
-        heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.animationDelay = (Math.random() * 15) + 's';
-        heart.style.animationDuration = (12 + Math.random() * 15) + 's';
-        heart.style.fontSize = (16 + Math.random() * 20) + 'px';
-        heartsContainer.appendChild(heart);
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement('i');
+        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+        heart.className = `fa-solid ${randomIcon} bg-heart`;
+        heart.style.left = `${Math.random() * 100}vw`;
+        heart.style.animationDuration = `${6 + Math.random() * 6}s`;
+        heart.style.animationDelay = `${Math.random() * 5}s`;
+        heart.style.fontSize = `${16 + Math.random() * 24}px`;
+        container.appendChild(heart);
       }
     }
+    initBackground();
 
-    // Navigation helper
+    // Helper: Step Navigator
     function showStep(stepId) {
-      const steps = ['step-1', 'step-2', 'step-3', 'outcome-love', 'outcome-gay', 'outcome-friend'];
-      steps.forEach(id => {
-        const el = document.getElementById(id);
-        if (id === stepId) {
-          el.classList.remove('step-hidden');
-          el.classList.add('step-active');
-        } else {
-          el.classList.remove('step-active');
-          el.classList.add('step-hidden');
-        }
+      document.querySelectorAll('.step-view').forEach(view => {
+        view.classList.add('hidden');
       });
+      document.getElementById(stepId).classList.remove('hidden');
     }
 
-    function handleNameKey(event) {
-      if (event.key === 'Enter') {
-        submitStep1();
-      }
-    }
+    // Step 1: Handle Name Submission
+    function handleNextName() {
+      const nameInput = document.getElementById('name-input').value.trim();
+      const errorEl = document.getElementById('name-error');
 
-    function submitStep1() {
-      const input = document.getElementById('name-input');
-      const error = document.getElementById('name-error');
-      const val = input.value.trim();
-
-      if (!val) {
-        error.classList.remove('hidden');
-        input.focus();
+      if (!nameInput) {
+        errorEl.classList.remove('hidden');
         return;
       }
 
-      error.classList.add('hidden');
-      quizState.name = val;
-      document.getElementById('display-name').innerText = val;
+      errorEl.classList.add('hidden');
+      quizState.name = nameInput;
+      
+      document.querySelectorAll('.user-name-result').forEach(el => el.textContent = quizState.name);
+      document.getElementById('display-user-name').textContent = quizState.name;
+
       showStep('step-2');
     }
 
-    function selectGender(genderChoice) {
-      quizState.gender = genderChoice;
+    // Step 2: Handle Gender Selection
+    function selectGender(gender) {
+      quizState.gender = gender;
       resetNoButton();
       showStep('step-3');
+      setupNoButtonBehavior();
     }
 
-    // Reset No Button position and scale
-    function resetNoButton() {
-      noButtonScale = 1.0;
-      noButtonDisappeared = false;
+    // Configure NO Button depending on Gender
+    function setupNoButtonBehavior() {
       const noBtn = document.getElementById('no-btn');
-      noBtn.style.transform = 'translate(0px, 0px) scale(1)';
-      noBtn.style.opacity = '1';
-      noBtn.style.pointerEvents = 'auto';
-    }
+      
+      // Remove previous event listeners by cloning
+      const newNoBtn = noBtn.cloneNode(true);
+      noBtn.parentNode.replaceChild(newNoBtn, noBtn);
 
-    // Dynamic No Button handling for Female vs Male
-    function handleNoInteraction(e) {
       if (quizState.gender === 'Female') {
-        if (e && e.preventDefault) e.preventDefault();
-        escapeAndShrinkNoButton();
+        // Female: Escaping and Shrinking behavior
+        newNoBtn.addEventListener('mouseover', escapeAndShrink);
+        newNoBtn.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          escapeAndShrink();
+        });
+        newNoBtn.onclick = (e) => {
+          e.preventDefault();
+          escapeAndShrink();
+        };
+      } else {
+        // Male: Standard click behavior
+        newNoBtn.onclick = () => handleLoveAnswer(false);
       }
     }
 
-    function escapeAndShrinkNoButton() {
-      if (noButtonDisappeared) return;
-
+    // Escaping and Shrinking logic for Female "No" choice
+    function escapeAndShrink() {
       const noBtn = document.getElementById('no-btn');
-      
-      // Decrease scale each time female hovers or clicks
-      noButtonScale -= 0.25;
+      noClickCount++;
 
-      if (noButtonScale <= 0.1) {
-        // Disappear completely!
-        noButtonScale = 0;
-        noButtonDisappeared = true;
-        noBtn.style.transform = `scale(0)`;
-        noBtn.style.opacity = '0';
-        noBtn.style.pointerEvents = 'none';
+      currentScale = Math.max(0, 1 - (noClickCount * 0.25));
+      
+      if (currentScale <= 0.05) {
+        noBtn.style.transform = 'scale(0)';
+        noBtn.style.display = 'none';
         return;
       }
 
-      // Random offset movement + shrink
-      const randomX = (Math.random() - 0.5) * 220;
-      const randomY = (Math.random() - 0.5) * 140;
+      const playground = document.getElementById('button-playground');
+      const rect = playground.getBoundingClientRect();
 
-      noBtn.style.transform = `translate(${randomX}px, ${randomY}px) scale(${noButtonScale})`;
+      const maxX = rect.width / 2 - 40;
+      const maxY = 60;
+
+      const randomX = (Math.random() - 0.5) * maxX * 2;
+      const randomY = (Math.random() - 0.5) * maxY * 2;
+
+      noBtn.style.position = 'absolute';
+      noBtn.style.transform = `translate(${randomX}px, ${randomY}px) scale(${currentScale})`;
     }
 
-    function handleNoClick() {
+    function resetNoButton() {
+      noClickCount = 0;
+      currentScale = 1.0;
+      const noBtn = document.getElementById('no-btn');
+      noBtn.style.position = 'static';
+      noBtn.style.transform = 'scale(1)';
+      noBtn.style.display = 'inline-block';
+    }
+
+    // Step 3: Handle Final Decision & Send to Google Sheets
+    function handleLoveAnswer(loves) {
+      quizState.lovesFritz = loves;
+
+      let answerText = "";
+
       if (quizState.gender === 'Female') {
-        // Escapes/shrinks on click too if clicked
-        escapeAndShrinkNoButton();
-      } else {
-        // Male clicked No
-        answerLove(false);
-      }
-    }
-
-    // Final Outcome Decision Logic
-    function answerLove(doesLove) {
-      quizState.lovesFritz = doesLove;
-
-      if (quizState.gender === 'Male') {
-        if (doesLove) {
-          // Male + Yes = "GAY"
-          document.getElementById('gay-name').innerText = quizState.name;
+        if (loves) {
+          answerText = "I love you too ❤️";
+          showStep('outcome-love');
+          triggerHeartsConfetti();
+        }
+      } else if (quizState.gender === 'Male') {
+        if (loves) {
+          answerText = "GAY 🌈";
           showStep('outcome-gay');
           triggerRainbowConfetti();
         } else {
-          // Male + No = "Then, Okay You Are My Friend"
-          document.getElementById('friend-name').innerText = quizState.name;
+          answerText = "Then, Okay You Are My Friend 🤝";
           showStep('outcome-friend');
         }
-      } else if (quizState.gender === 'Female') {
-        if (doesLove) {
-          // Female + Yes = "I love you too ❤️"
-          document.getElementById('romantic-name').innerText = quizState.name;
-          showStep('outcome-love');
-          triggerHeartConfetti();
-        }
       }
+
+      // Send to Google Sheet
+      sendToGoogleSheet(quizState.name, quizState.gender, answerText);
     }
 
-    // Confetti Generators
-    function triggerHeartConfetti() {
+    // Send payload function
+    function sendToGoogleSheet(name, gender, answer) {
+      if (typeof GOOGLE_SHEET_SCRIPT_URL === 'undefined' || !GOOGLE_SHEET_SCRIPT_URL || GOOGLE_SHEET_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT")) {
+        return;
+      }
+
+      const payload = { name: name, gender: gender, answer: answer };
+
+      fetch(GOOGLE_SHEET_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(err => console.log('Data submission error:', err));
+    }
+
+    // Confetti Effects
+    function triggerHeartsConfetti() {
       if (typeof confetti === 'function') {
         confetti({
-          particleCount: 90,
-          spread: 80,
+          particleCount: 80,
+          spread: 70,
           origin: { y: 0.6 },
-          colors: ['#ff69b4', '#ff1493', '#ff007f', '#ffb6c1']
+          colors: ['#f472b6', '#ec4899', '#fb7185', '#e11d48']
         });
       }
     }
@@ -481,22 +427,7 @@
         });
       }
     }
-
-    function restartQuiz() {
-      quizState = { name: '', gender: '', lovesFritz: false };
-      document.getElementById('name-input').value = '';
-      resetNoButton();
-      showStep('step-1');
-    }
-    
-    // google script kineme hahahahahaha
-function restartQuiz() {
-      quizState = { name: '', gender: '', lovesFritz: false };
-      document.getElementById('name-input').value = '';
-      resetNoButton();
-      showStep('step-1');
-    }
-    
+  
 // ==========================================
 // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
 // ==========================================
