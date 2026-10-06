@@ -656,21 +656,6 @@ function sendToGoogleSheet(name, gender, answer) {
   document.body.removeChild(form);
 }
 
-// Update answerLove to send the data
-function answerLove(answer) {
-  sendToGoogleSheet(userName, userGender, answer);
-  
-  if (userGender === 'Female' && answer === 'Yes') {
-    showStep('outcome-love');
-    triggerLoveConfetti();
-  } else if (userGender === 'Male' && answer === 'Yes') {
-    showStep('outcome-gay');
-    triggerRainbowConfetti();
-  } else {
-    showStep('outcome-friend');
-    triggerFriendConfetti();
-  }
-}
   </script>
 </body>
 </html>
