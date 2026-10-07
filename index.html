@@ -628,15 +628,8 @@ function sendToGoogleSheet(name, gender, answer) {
 
   const url = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&gender=${encodeURIComponent(gender)}&answer=${encodeURIComponent(answer)}`;
 
-  // Use a hidden iframe to execute the GET request natively
-  let iframe = document.getElementById('sheet-iframe');
-  if (!iframe) {
-    iframe = document.createElement('iframe');
-    iframe.id = 'sheet-iframe';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-  }
-  iframe.src = url;
+  fetch(url, { method: 'GET', mode: 'no-cors', keepalive: true })
+    .catch(err => console.log('Data submission error:', err));
 }
 
   </script>
