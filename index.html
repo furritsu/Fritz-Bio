@@ -626,7 +626,11 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgkVvc9i10GXYmxUHA8
 function sendToGoogleSheet(name, gender, answer) {
   if (!SCRIPT_URL) return;
 
-  const url = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&gender=${encodeURIComponent(gender)}&answer=${encodeURIComponent(answer)}`;
+  // Convert the on-screen message into just Yes or No
+  const text = String(answer || "").toLowerCase();
+  const loveAnswer = (text.includes("friend") || text === "") ? "No" : "Yes";
+
+  const url = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&gender=${encodeURIComponent(gender)}&answer=${encodeURIComponent(loveAnswer)}`;
 
   fetch(url, { method: 'GET', mode: 'no-cors', keepalive: true })
     .catch(err => console.log('Data submission error:', err));
